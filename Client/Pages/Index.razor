@@ -1,7 +1,26 @@
-﻿@page "/"
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@inject HttpClient Http
+
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+@if (message == null)
+{
+    <p>No message from API</p>
+}
+else
+{
+    <p>@message</p>
+}
+
+@code {
+    private string? message;
+
+    protected override async Task OnInitializedAsync() => 
+        message = await Http.GetFromJsonAsync<string>("api/message");
+}
