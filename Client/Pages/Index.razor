@@ -15,12 +15,12 @@
 }
 else
 {
-    <p>@message</p>
+    <p>@message.Text</p>
 }
 
 @code {
-    private string? message;
+    private ApiMessage? message;
 
     protected override async Task OnInitializedAsync() => 
-        message = await Http.GetFromJsonAsync<string>("api/message");
+        message = await Http.GetFromJsonAsync<ApiMessage>("api/message");
 }
