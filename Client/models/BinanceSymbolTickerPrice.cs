@@ -1,3 +1,5 @@
+namespace LiquidDot;
+
 public class BinanceSymbolTickerPrice
 {
     public string? Symbol { get; set; }

@@ -7,20 +7,37 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Liquid DOT ratios</h1>
 
-@if (bdotPrice == null)
+@if (bdotPrice == null || bdotPrice.Symbol == null || bdotPrice.Price == null)
 {
     <p>No info available</p>
 }
 else
 {
-    <p>@bdotPrice.Symbol: @bdotPrice.Price</p>
+    <p>@bdotPrice.Symbol.Substring(0, Math.Min(bdotPrice.Symbol.Length, 4)): @bdotPrice.Price</p>
+}
+
+@if (string.IsNullOrEmpty(cdotPrice))
+{
+    <p>No info available</p>
+}
+else
+{
+    <p>CDOT: @cdotPrice</p>
 }
 
 @code {
     private BinanceSymbolTickerPrice? bdotPrice;
+    private string? cdotPrice;
 
-    protected override async Task OnInitializedAsync() => 
+    protected override async Task OnInitializedAsync()
+    {
         bdotPrice = await Http.GetFromJsonAsync<BinanceSymbolTickerPrice>("https://api.binance.com/api/v3/ticker/price?symbol=BDOTDOT");
+        var cdotPriceRaw = await Http.GetStringAsync("https://analytics.parallel.fi/moneymarket/cDOT613");
+        if (!string.IsNullOrEmpty(cdotPriceRaw) && (cdotPriceRaw.Contains("cdot") || cdotPriceRaw.Contains("cDot") || cdotPriceRaw.Contains("cDOT") || cdotPriceRaw.Contains("CDOT")))
+        {
+            cdotPrice = "CDOT";
+        }
+    }
 }
